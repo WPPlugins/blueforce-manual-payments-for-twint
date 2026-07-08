@@ -3,7 +3,7 @@
  * Plugin Name:       Blueforce Manual Payments for TWINT
  * Plugin URI:        https://blueforce.ch/twint
  * Description:       Manual TWINT payment method for WooCommerce without the TWINT API – payments are reconciled and confirmed by hand.
- * Version:           1.5.1
+ * Version:           1.6.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.5.1' );
+define( 'BF_TWINT_VERSION', '1.6.0' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
@@ -86,11 +86,44 @@ add_action(
 		// «Zahlung erhalten»-Button aus der Bestellansicht (Form-POST).
 		add_action( 'admin_post_bf_twint_mark_paid', array( 'BF_TWINT_Gateway', 'handle_mark_paid' ) );
 
+		// «Ich habe bezahlt»-Meldung des Kunden (Danke-Seite/«Mein Konto», auch als Gast).
+		add_action( 'admin_post_bf_twint_claim_paid', array( 'BF_TWINT_Gateway', 'handle_claim_paid' ) );
+		add_action( 'admin_post_nopriv_bf_twint_claim_paid', array( 'BF_TWINT_Gateway', 'handle_claim_paid' ) );
+
 		// Datenschutz: Kundennummer in Export/Löschung/Datenschutzerklärung einbinden.
 		require_once BF_TWINT_PATH . 'includes/class-bf-twint-privacy.php';
 		BF_TWINT_Privacy::init();
+
+		// Admin-Übersicht «TWINT-Zahlungen» (offene Zahlungen abgleichen/freigeben).
+		if ( is_admin() ) {
+			require_once BF_TWINT_PATH . 'includes/class-bf-twint-payments-page.php';
+			BF_TWINT_Payments_Page::init();
+		}
+
+		// Auto-Cancel: unbezahlte TWINT-Bestellungen nach konfigurierter Frist stornieren.
+		require_once BF_TWINT_PATH . 'includes/class-bf-twint-auto-cancel.php';
+		BF_TWINT_Auto_Cancel::init();
+
+		// Zahlungserinnerung: einmalige Mail für unbezahlte TWINT-Bestellungen.
+		require_once BF_TWINT_PATH . 'includes/class-bf-twint-payment-reminder.php';
+		BF_TWINT_Payment_Reminder::init();
 	},
 	11
+);
+
+/**
+ * Beim Deaktivieren die Cron-Events des Plugins entfernen.
+ */
+register_deactivation_hook(
+	__FILE__,
+	static function () {
+		if ( class_exists( 'BF_TWINT_Auto_Cancel' ) ) {
+			BF_TWINT_Auto_Cancel::unschedule();
+		}
+		if ( class_exists( 'BF_TWINT_Payment_Reminder' ) ) {
+			BF_TWINT_Payment_Reminder::unschedule();
+		}
+	}
 );
 
 /**
