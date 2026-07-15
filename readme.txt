@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,8 @@ Manual TWINT payment method for WooCommerce – the plugin needs no TWINT API or
 This plugin adds a TWINT payment method to WooCommerce. The **plugin itself** needs no TWINT API, no acquiring contract and no payment service provider – it uses the manual TWINT process (send or request money by mobile number) and is therefore suited to small shops, clubs and sole traders. You remain responsible for complying with your own TWINT, bank and business terms for commercial use.
 
 TWINT does not offer its payment API publicly. An automated integration is only possible through a TWINT acquiring contract or a payment service provider. This plugin deliberately takes the manual route, so you can start without a TWINT integration contract while still meeting your own TWINT and bank conditions.
+
+Please note: private TWINT accounts have a monthly limit on money received (mostly CHF 4'000), so check your own limit with your bank.
 
 = Two workflows =
 
@@ -82,6 +84,9 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.2 =
+* New: dashboard widget showing the open TWINT payments (amount, customer reports, age of the oldest) and the payments received in the last 30 days, with a shortcut to the payments overview.
 
 = 1.6.1 =
 * Fixed: orders were marked as reminded even when the reminder email failed to send; they are now retried on the next run.

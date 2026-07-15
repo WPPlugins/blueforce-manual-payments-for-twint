@@ -3,7 +3,7 @@
  * Plugin Name:       Blueforce Manual Payments for TWINT
  * Plugin URI:        https://blueforce.ch/twint
  * Description:       Manual TWINT payment method for WooCommerce without the TWINT API – payments are reconciled and confirmed by hand.
- * Version:           1.6.1
+ * Version:           1.6.2
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Requires Plugins:  woocommerce
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'BF_TWINT_VERSION', '1.6.1' );
+define( 'BF_TWINT_VERSION', '1.6.2' );
 define( 'BF_TWINT_FILE', __FILE__ );
 define( 'BF_TWINT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'BF_TWINT_URL', plugin_dir_url( __FILE__ ) );
@@ -94,10 +94,14 @@ add_action(
 		require_once BF_TWINT_PATH . 'includes/class-bf-twint-privacy.php';
 		BF_TWINT_Privacy::init();
 
-		// Admin-Übersicht «TWINT-Zahlungen» (offene Zahlungen abgleichen/freigeben).
+		// Admin-Übersicht «TWINT-Zahlungen» (offene Zahlungen abgleichen/freigeben)
+		// und Dashboard-Widget mit dem Handlungsbedarf auf einen Blick.
 		if ( is_admin() ) {
 			require_once BF_TWINT_PATH . 'includes/class-bf-twint-payments-page.php';
 			BF_TWINT_Payments_Page::init();
+
+			require_once BF_TWINT_PATH . 'includes/class-bf-twint-dashboard-widget.php';
+			BF_TWINT_Dashboard_Widget::init();
 		}
 
 		// Auto-Cancel: unbezahlte TWINT-Bestellungen nach konfigurierter Frist stornieren.
