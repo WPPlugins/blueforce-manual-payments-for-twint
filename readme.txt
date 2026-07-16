@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,11 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.3 =
+* Fixed: auto-cancelling could stop working permanently. Orders with a customer payment report were skipped only after loading, so once enough of them piled up they filled every batch and newer unpaid orders were never cancelled. They are now excluded from the query itself.
+* Fixed: payment reminders could be missed on shops with many open TWINT orders, for the same reason.
+* Fixed: the cron events are now removed reliably when the plugin is deactivated, even if WooCommerce was deactivated first.
 
 = 1.6.2 =
 * New: dashboard widget showing the open TWINT payments (amount, customer reports, age of the oldest) and the payments received in the last 30 days, with a shortcut to the payments overview.
