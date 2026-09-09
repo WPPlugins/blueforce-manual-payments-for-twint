@@ -4,7 +4,7 @@ Tags: woocommerce, twint, payment gateway, switzerland, manual payment
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.6.6
+Stable tag: 1.6.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Manual TWINT payment method for WooCommerce – the plugin needs no TWINT API or
 
 == Description ==
 
-This plugin adds a TWINT payment method to WooCommerce. The **plugin itself** needs no TWINT API, no acquiring contract and no payment service provider – it uses the manual TWINT process (send or request money by mobile number) and is therefore suited to small shops, clubs and sole traders. You remain responsible for complying with your own TWINT, bank and business terms for commercial use.
+This plugin adds a TWINT payment method to WooCommerce. The **plugin itself** needs no TWINT API, no acquiring contract and no payment service provider – it uses the manual TWINT process (send or request money by mobile number) and is therefore suited to small shops, clubs and sole traders. It runs on any hosting: no PHP extensions, no certificate, PHP 7.4 or newer. You remain responsible for complying with your own TWINT, bank and business terms for commercial use.
 
 TWINT does not offer its payment API publicly. An automated integration is only possible through a TWINT acquiring contract or a payment service provider. This plugin deliberately takes the manual route, so you can start without a TWINT integration contract while still meeting your own TWINT and bank conditions.
 
@@ -35,8 +35,9 @@ In both cases the order is set to "On hold" and the incoming payment is confirme
 * Customers can report "I have sent the payment" – shown on the order and in the payments overview
 * "Paid with TWINT" note on PDF invoices (with WooCommerce PDF Invoices & Packing Slips)
 * HPOS compatible
-* Translation-ready; German (Germany and Switzerland), French (Switzerland) and Italian (Switzerland) translations included
+* Translation-ready; German (Germany and Switzerland) included, French and Italian via translate.wordpress.org
 * No external dependencies, no tracking, no phone-home calls
+* Runs on any hosting: no PHP extensions required, no certificate, PHP 7.4 or newer
 
 == Installation ==
 
@@ -84,6 +85,11 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 6. Customers can revisit the payment instructions at any time under My account – View order.
 
 == Changelog ==
+
+= 1.6.7 =
+* Security: hardening release. Stricter validation of customer input at checkout and safer handling of redirects. No configuration changes needed, updating is recommended.
+* Privacy: order notes no longer contain the full customer phone number or email address. The full values stay in the order itself and remain covered by the personal-data export and erasure.
+* Fixed: uninstalling the plugin now also removes the review-prompt counter and the per-user dismissal.
 
 = 1.6.6 =
 * New: an unobtrusive review prompt on the "TWINT payments" screen, shown only after you have released at least 10 payments with the plugin. It offers "Write a review", "I already did" and "Maybe later", is dismissed per user and never appears anywhere else in the admin.
@@ -175,7 +181,7 @@ In the "I request" workflow the plugin stores the TWINT mobile number provided b
 
 = 1.2.0 =
 * "Mark as paid" button in the order screen: release a TWINT order as paid with one click.
-* French (fr_CH) and Italian (it_CH) translations – including block checkout.
+* French and Italian translations – including block checkout.
 * Copy button for the order number on the thank-you page (fewer typos in the TWINT message).
 * TWINT is only shown when the shop currency is CHF (filter "bf_twint_is_available" to override).
 
